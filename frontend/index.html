@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KnowFlow 社区</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="bg bg-a"></div>
+    <div class="bg bg-b"></div>
+
+    <div class="page">
+      <header class="topbar">
+        <div class="brand-block">
+          <div class="brand-mark">K</div>
+          <div>
+            <h1>KnowFlow</h1>
+            <p>问答 · 观点 · 连接</p>
+          </div>
+        </div>
+        <div class="api-config">
+          <input id="api-base-input" placeholder="API Base，例如 http://localhost:8080/api/v1" />
+          <button id="api-base-save">保存 API</button>
+          <button id="logout-btn" class="ghost">退出登录</button>
+        </div>
+      </header>
+
+      <div id="notice" class="notice"></div>
+
+      <div class="layout">
+        <aside class="panel left-panel">
+          <section class="card">
+            <h2>账号</h2>
+            <div id="auth-panel"></div>
+          </section>
+
+          <section class="card">
+            <h2>发一篇想法</h2>
+            <form id="publish-form" class="stack-form">
+              <input name="title" placeholder="标题" required maxlength="80" />
+              <textarea name="content" placeholder="写下你的观点..." required maxlength="5000"></textarea>
+              <button type="submit">发布文章</button>
+            </form>
+          </section>
+        </aside>
+
+        <main class="panel center-panel">
+          <section class="card feed-toolbar">
+            <div id="feed-tabs" class="chip-row"></div>
+            <div class="toolbar-right">
+              <input id="feed-search-input" placeholder="搜索标题 / 作者 / 内容" />
+              <button id="feed-refresh-btn" class="ghost">刷新</button>
+            </div>
+          </section>
+
+          <section id="feed-list" class="card feed-list"></section>
+          <section id="detail-panel" class="card detail-panel"></section>
+        </main>
+
+        <aside class="panel right-panel">
+          <section class="card">
+            <h2>发现用户</h2>
+            <div id="discover-list"></div>
+          </section>
+
+          <section class="card">
+            <h2>互关私信</h2>
+            <div id="mutual-list" class="mutual-list"></div>
+            <div id="chat-panel" class="chat-panel"></div>
+            <form id="chat-form" class="stack-form inline-form">
+              <input name="content" placeholder="输入消息" maxlength="280" required />
+              <button type="submit">发送</button>
+            </form>
+          </section>
+        </aside>
+      </div>
+    </div>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
