@@ -33,6 +33,14 @@ func queryInt(c *gin.Context, name string, defaultValue int) (int, error) {
 	return strconv.Atoi(raw)
 }
 
+func queryInt64(c *gin.Context, name string, defaultValue int64) (int64, error) {
+	raw := c.Query(name)
+	if raw == "" {
+		return defaultValue, nil
+	}
+	return strconv.ParseInt(raw, 10, 64)
+}
+
 func handleErr(c *gin.Context, err error) {
 	switch {
 	case errors.Is(err, service.ErrInvalidArgument):

@@ -75,8 +75,8 @@ func (s *ArticleService) GetDetail(userID, articleID int64) (model.ArticleDetail
 	}, nil
 }
 
-func (s *ArticleService) Feed(userID int64) ([]model.ArticleCard, error) {
-	if userID <= 0 {
+func (s *ArticleService) Feed(userID int64, limit int, cursor int64) ([]model.ArticleCard, error) {
+	if userID <= 0 || limit <= 0 || cursor < 0 {
 		return nil, ErrInvalidArgument
 	}
 	if _, err := s.userDAO.GetByID(userID); err != nil {
@@ -90,19 +90,19 @@ func (s *ArticleService) Feed(userID int64) ([]model.ArticleCard, error) {
 	if len(following) == 0 {
 		return []model.ArticleCard{}, nil
 	}
-	articles, err := s.articleDAO.ListByAuthorIDs(following)
+	articles, err := s.articleDAO.ListByAuthorIDs(following, limit, cursor)
 	if err != nil {
 		return nil, err
 	}
 	return s.toCards(articles)
 }
 
-func (s *ArticleService) Recommend(limit int) ([]model.ArticleCard, error) {
-	if limit <= 0 {
-		limit = 20
+func (s *ArticleService) Recommend(limit int, cursor int64) ([]model.ArticleCard, error) {
+	if limit <= 0 || cursor < 0 {
+		return nil, ErrInvalidArgument
 	}
 
-	articles, err := s.articleDAO.ListRecent(limit)
+	articles, err := s.articleDAO.ListRecent(limit, cursor)
 	if err != nil {
 		return nil, err
 	}

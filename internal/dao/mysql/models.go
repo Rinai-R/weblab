@@ -21,6 +21,16 @@ type ArticleRecord struct {
 
 func (ArticleRecord) TableName() string { return "articles" }
 
+type QuestionRecord struct {
+	ID          int64     `gorm:"primaryKey;autoIncrement"`
+	AuthorID    int64     `gorm:"column:author_id;not null;index:idx_questions_author_created,priority:1"`
+	Title       string    `gorm:"size:255;not null"`
+	Description string    `gorm:"type:text;not null"`
+	CreatedAt   time.Time `gorm:"column:created_at;autoCreateTime;index:idx_questions_author_created,priority:2"`
+}
+
+func (QuestionRecord) TableName() string { return "questions" }
+
 type FollowRecord struct {
 	FollowerID int64     `gorm:"column:follower_id;primaryKey;autoIncrement:false"`
 	FolloweeID int64     `gorm:"column:followee_id;primaryKey;autoIncrement:false;index:idx_follows_followee"`
@@ -46,6 +56,24 @@ type CommentRecord struct {
 }
 
 func (CommentRecord) TableName() string { return "comments" }
+
+type AnswerRecord struct {
+	ID         int64     `gorm:"primaryKey;autoIncrement"`
+	QuestionID int64     `gorm:"column:question_id;not null;index:idx_answers_question_created,priority:1"`
+	AuthorID   int64     `gorm:"column:author_id;not null"`
+	Content    string    `gorm:"type:text;not null"`
+	CreatedAt  time.Time `gorm:"column:created_at;autoCreateTime;index:idx_answers_question_created,priority:2"`
+}
+
+func (AnswerRecord) TableName() string { return "answers" }
+
+type AnswerVoteRecord struct {
+	AnswerID  int64     `gorm:"column:answer_id;primaryKey;autoIncrement:false"`
+	UserID    int64     `gorm:"column:user_id;primaryKey;autoIncrement:false;index:idx_answer_votes_user"`
+	CreatedAt time.Time `gorm:"column:created_at;autoCreateTime"`
+}
+
+func (AnswerVoteRecord) TableName() string { return "answer_votes" }
 
 type MessageRecord struct {
 	ID         int64     `gorm:"primaryKey;autoIncrement"`

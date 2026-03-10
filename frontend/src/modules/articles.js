@@ -7,12 +7,12 @@ export function publishArticle(title, content) {
   });
 }
 
-export function recommendFeed(limit = 20) {
-  return request(`/articles/recommend?limit=${encodeURIComponent(limit)}`);
+export function recommendFeed(limit = 10, cursor = 0) {
+  return request(`/articles/recommend?limit=${encodeURIComponent(limit)}&cursor=${encodeURIComponent(cursor)}`);
 }
 
-export function followingFeed() {
-  return request('/articles/feed');
+export function followingFeed(limit = 10, cursor = 0) {
+  return request(`/articles/feed?limit=${encodeURIComponent(limit)}&cursor=${encodeURIComponent(cursor)}`);
 }
 
 export function articleDetail(id) {

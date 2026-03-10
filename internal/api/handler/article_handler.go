@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"weblab/internal/model"
 	"weblab/internal/service"
 	"weblab/internal/utils"
 
@@ -68,13 +69,18 @@ func (h *ArticleHandler) Recommend(c *gin.Context) {
 		handleErr(c, service.ErrInvalidArgument)
 		return
 	}
+	cursor, err := queryInt64(c, "cursor", 0)
+	if err != nil {
+		handleErr(c, service.ErrInvalidArgument)
+		return
+	}
 
-	feed, err := h.articleSvc.Recommend(limit)
+	feed, err := h.articleSvc.Recommend(limit, cursor)
 	if err != nil {
 		handleErr(c, err)
 		return
 	}
-	utils.Success(c, feed)
+	utils.Success(c, pullResp(feed, articleCursor(feed)))
 }
 
 func (h *ArticleHandler) Feed(c *gin.Context) {
@@ -84,10 +90,28 @@ func (h *ArticleHandler) Feed(c *gin.Context) {
 		return
 	}
 
-	feed, err := h.articleSvc.Feed(userID)
+	limit, err := queryInt(c, "limit", 20)
+	if err != nil {
+		handleErr(c, service.ErrInvalidArgument)
+		return
+	}
+	cursor, err := queryInt64(c, "cursor", 0)
+	if err != nil {
+		handleErr(c, service.ErrInvalidArgument)
+		return
+	}
+
+	feed, err := h.articleSvc.Feed(userID, limit, cursor)
 	if err != nil {
 		handleErr(c, err)
 		return
 	}
-	utils.Success(c, feed)
+	utils.Success(c, pullResp(feed, articleCursor(feed)))
+}
+
+func articleCursor(items []model.ArticleCard) int64 {
+	if len(items) == 0 {
+		return 0
+	}
+	return items[len(items)-1].ID
 }

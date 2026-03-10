@@ -48,15 +48,24 @@ func (d *ArticleDAO) GetByID(id int64) (model.Article, error) {
 	}, nil
 }
 
-func (d *ArticleDAO) ListByAuthorIDs(authorIDs []int64) ([]model.Article, error) {
+func (d *ArticleDAO) ListByAuthorIDs(authorIDs []int64, limit int, cursor int64) ([]model.Article, error) {
 	if len(authorIDs) == 0 {
 		return []model.Article{}, nil
 	}
+	if limit <= 0 {
+		limit = 20
+	}
 
 	var records []ArticleRecord
-	err := d.db.Where("author_id IN ?", authorIDs).
+	query := d.db.Where("author_id IN ?", authorIDs)
+	if cursor > 0 {
+		query = query.Where("id < ?", cursor)
+	}
+
+	err := query.
 		Order("created_at DESC").
 		Order("id DESC").
+		Limit(limit).
 		Find(&records).Error
 	if err != nil {
 		return nil, normalizeErr(err)
@@ -75,13 +84,18 @@ func (d *ArticleDAO) ListByAuthorIDs(authorIDs []int64) ([]model.Article, error)
 	return articles, nil
 }
 
-func (d *ArticleDAO) ListRecent(limit int) ([]model.Article, error) {
+func (d *ArticleDAO) ListRecent(limit int, cursor int64) ([]model.Article, error) {
 	if limit <= 0 {
-		return []model.Article{}, nil
+		limit = 20
 	}
 
 	var records []ArticleRecord
-	err := d.db.Order("created_at DESC").Order("id DESC").Limit(limit).Find(&records).Error
+	query := d.db
+	if cursor > 0 {
+		query = query.Where("id < ?", cursor)
+	}
+
+	err := query.Order("created_at DESC").Order("id DESC").Limit(limit).Find(&records).Error
 	if err != nil {
 		return nil, normalizeErr(err)
 	}

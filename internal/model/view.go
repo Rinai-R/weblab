@@ -31,3 +31,28 @@ type ArticleDetail struct {
 	Liked     bool      `json:"liked"`
 	Comments  []Comment `json:"comments"`
 }
+
+type QuestionCard struct {
+	ID          int64     `json:"id"`
+	Title       string    `json:"title"`
+	Description string    `json:"description"`
+	Author      UserBrief `json:"author"`
+	AnswerCount int       `json:"answer_count"`
+	CreatedAt   time.Time `json:"created_at"`
+}
+
+type AnswerView struct {
+	ID        int64     `json:"id"`
+	Content   string    `json:"content"`
+	Author    UserBrief `json:"author"`
+	VoteCount int       `json:"vote_count"`
+	Voted     bool      `json:"voted"`
+	CreatedAt time.Time `json:"created_at"`
+}
+
+type QuestionDetail struct {
+	Question    Question     `json:"question"`
+	Author      UserBrief    `json:"author"`
+	AnswerCount int          `json:"answer_count"`
+	Answers     []AnswerView `json:"answers"`
+}

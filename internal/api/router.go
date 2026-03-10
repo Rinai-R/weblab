@@ -24,6 +24,15 @@ func RegisterRoutes(r *gin.Engine, c *bootstrap.Container) {
 	secured.GET("/articles/recommend", c.ArticleHandler.Recommend)
 	secured.GET("/articles/:id", c.ArticleHandler.GetDetail)
 
+	secured.POST("/questions", c.QuestionHandler.Ask)
+	secured.GET("/questions/recommend", c.QuestionHandler.Recommend)
+	secured.GET("/questions/following", c.QuestionHandler.FollowFeed)
+	secured.GET("/questions/:id", c.QuestionHandler.Detail)
+	secured.POST("/questions/:id/answers", c.QuestionHandler.Answer)
+	secured.GET("/questions/:id/answers", c.QuestionHandler.ListAnswers)
+	secured.POST("/questions/answers/:id/vote", c.QuestionHandler.VoteAnswer)
+	secured.DELETE("/questions/answers/:id/vote", c.QuestionHandler.UnvoteAnswer)
+
 	secured.POST("/social/follow/:id", c.SocialHandler.Follow)
 	secured.GET("/social/discover", c.SocialHandler.Discover)
 	secured.GET("/social/mutuals", c.SocialHandler.Mutuals)

@@ -29,16 +29,24 @@ frontend                          # 独立前端工程（HTML/CSS/ESM）
 
 2. Article 模块
 - 发布文章
-- 推荐流（知乎风格首页）
-- 关注流
+- 推荐流（拉模式：`limit + cursor`）
+- 关注流（拉模式：`limit + cursor`）
 - 文章详情（含作者、点赞状态、评论）
 
-3. Interaction 模块
+3. Question 模块（新增）
+- 发布问题
+- 推荐问答流（拉模式）
+- 关注问答流（拉模式）
+- 问题详情
+- 回答问题 / 回答列表（拉模式）
+- 回答赞同 / 取消赞同
+
+4. Interaction 模块
 - 点赞 / 取消点赞
 - 发表评论
 - 评论列表
 
-4. Social 模块
+5. Social 模块
 - 关注用户
 - 发现用户列表
 - 互关用户列表
@@ -85,9 +93,19 @@ python3 -m http.server 5173 -d frontend
 
 ### Article（需 token）
 - `POST /articles` 发布文章
-- `GET /articles/recommend?limit=20` 推荐流
-- `GET /articles/feed` 关注流
+- `GET /articles/recommend?limit=20&cursor=0` 推荐流（拉模式）
+- `GET /articles/feed?limit=20&cursor=0` 关注流（拉模式）
 - `GET /articles/:id` 文章详情
+
+### Question（需 token）
+- `POST /questions` 发布问题
+- `GET /questions/recommend?limit=20&cursor=0` 推荐问答流（拉模式）
+- `GET /questions/following?limit=20&cursor=0` 关注问答流（拉模式）
+- `GET /questions/:id` 问题详情
+- `POST /questions/:id/answers` 发表回答
+- `GET /questions/:id/answers?limit=20&cursor=0` 回答列表（拉模式）
+- `POST /questions/answers/:id/vote` 回答赞同
+- `DELETE /questions/answers/:id/vote` 取消赞同
 
 ### Social（需 token）
 - `POST /social/follow/:id` 关注用户
