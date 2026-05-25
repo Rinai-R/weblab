@@ -31,7 +31,7 @@ services:
     environment:
       PORT: "8080"
       JWT_SECRET: "change-this-in-production"
-      MYSQL_HOST: mysql
+      MYSQL_HOST: weblab-mysql
       MYSQL_PORT: "3306"
       MYSQL_USER: weblab
       MYSQL_PASSWORD: weblab123456
