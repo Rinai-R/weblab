@@ -13,7 +13,7 @@ import (
 func main() {
 	secret := os.Getenv("JWT_SECRET")
 	if secret == "" {
-		secret = "change-this-in-production"
+		secret = "secret"
 	}
 
 	container, err := bootstrap.BuildContainer(secret)
